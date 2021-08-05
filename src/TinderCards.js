@@ -1,26 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TinderCard from 'react-tinder-card'
 import './TinderCards.css'
+import axios from './axios'
 
 function TinderCards() {
-  const [people, setPeople] = useState([
-    {
-      name: "Heatstroke",
-      url: "https://images.unsplash.com/photo-1501285404133-0e100a37c3d4?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjJ8fGJhbmR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60"
-    },
-    {
-      name: "Adult Insects",
-      url: "https://images.unsplash.com/photo-1541804627596-3b5b9ef58c93?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80"
-    },
-    {
-      name: "Wooden Shields",
-      url: "https://images.unsplash.com/photo-1544013204-eedd0bd6df1d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjR8fGJhbmR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60"
-    },
-    {
-      name: "Arggghhh",
-      url: "https://images.unsplash.com/photo-1549834125-80f9dda633c2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Njd8fGJhbmR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60"
-    },
-  ])
+  const [people, setPeople] = useState([])
+  useEffect(() => {
+    async function fetchData() {
+      const req = await axios.get("/cards")
+      setPeople(req.data);
+    }
+    fetchData()
+  }, [])
 
   const swiped = (direction, nameToDelete) => {
     console.log("removing: " + nameToDelete);
@@ -43,7 +34,7 @@ function TinderCards() {
             onCardLeftScreen={() => outOfFrame(person.name)}
           >
             <div
-              style={{ backgroundImage: `url(${person.url})` }}
+              style={{ backgroundImage: `url(${person.imgUrl})` }}
               className="card"
             >
               <h3>{person.name}</h3>
